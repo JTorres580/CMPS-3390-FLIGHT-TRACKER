@@ -2,16 +2,7 @@ import { Link } from 'react-router-dom';
 import useFlight from './useFlight.js';
 import { useFlights } from './FlightContext.jsx';
 
-/**
- * FlightCard - compact summary tile shown in the tracked-flights list.
- *
- * Receives only a flight number (string); fetches its own data so the list
- * page doesn't have to coordinate N parallel requests in one effect.
- */
 export default function FlightCard({ flightNumber }) {
-  // Fetch once on mount. No auto-polling — burns FR24 credits and the home
-  // page rarely needs sub-minute freshness anyway. Use the manual "Refresh"
-  // button (here on the card, or on the detail page) to force a re-fetch.
   const { flight, loading, error, refetch } = useFlight(flightNumber);
   const { untrackFlight } = useFlights();
 
@@ -24,9 +15,6 @@ export default function FlightCard({ flightNumber }) {
   }
 
   if (error) {
-    // Special-case 404: the flight isn't currently airborne. Don't show this
-    // as a scary "couldn't load" — invite the user to see the last leg by
-    // clicking through to the detail page, which has the fallback prompt.
     if (error.status === 404) {
       return (
         <div className="ft-card ft-card--idle">
