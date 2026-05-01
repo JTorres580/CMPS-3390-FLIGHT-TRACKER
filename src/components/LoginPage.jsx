@@ -1,30 +1,39 @@
-import { useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from './AuthContext.jsx';
-import { validateUsername, validatePassword } from '../validators.js';
+import { useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "./AuthContext.jsx";
+import { validateUsername, validatePassword } from "../validators.js";
 
 export default function LoginPage() {
   const { signIn } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
 
-  const redirectTo = location.state?.from?.pathname ?? '/';
+  const redirectTo = location.state?.from?.pathname ?? "/";
 
   function onSubmit(e) {
     e.preventDefault();
     setError(null);
 
     const u = validateUsername(username);
-    if (!u.ok) { setError(u.error); return; }
+    if (!u.ok) {
+      setError(u.error);
+      return;
+    }
 
     const p = validatePassword(password);
-    if (!p.ok) { setError(p.error); return; }
+    if (!p.ok) {
+      setError(p.error);
+      return;
+    }
 
     const result = signIn({ username: u.value, password: p.value });
-    if (!result.ok) { setError(result.error); return; }
+    if (!result.ok) {
+      setError(result.error);
+      return;
+    }
 
     navigate(redirectTo, { replace: true });
   }
@@ -34,7 +43,9 @@ export default function LoginPage() {
       <div className="ft-auth__card">
         <p className="ft-auth__eyebrow mono">Welcome back</p>
         <h1 className="ft-auth__title">Sign in</h1>
-        <p className="ft-auth__lede">Pick up where you left off — your tracked flights are waiting.</p>
+        <p className="ft-auth__lede">
+          Pick up where you left off — your tracked flights are waiting.
+        </p>
 
         <form className="ft-auth__form" onSubmit={onSubmit} noValidate>
           <label className="ft-auth__field">
@@ -60,9 +71,15 @@ export default function LoginPage() {
             />
           </label>
 
-          {error && <p className="ft-auth__error" role="alert">{error}</p>}
+          {error && (
+            <p className="ft-auth__error" role="alert">
+              {error}
+            </p>
+          )}
 
-          <button type="submit" className="ft-auth__btn">Sign in</button>
+          <button type="submit" className="ft-auth__btn">
+            Sign in
+          </button>
         </form>
 
         <p className="ft-auth__switch">
@@ -70,7 +87,8 @@ export default function LoginPage() {
         </p>
 
         <p className="ft-auth__disclaimer">
-          Demo accounts are stored locally in your browser. Don't reuse a real password.
+          Demo accounts are stored locally in your browser. Don't reuse a real
+          password.
         </p>
       </div>
     </div>
